@@ -195,29 +195,36 @@ exports.postValidate = async (req, res, next) => {
             $set: { isValid: true },
           }
         );
-        return true;
+        return res.status(200).json({
+          msg: "Verification successful",
+          path: `/changepassword/${userId}`,
+
+          // message: twilioRes,
+        });
       } else {
         // Invalid or expired OTP
         console.log("Invalid or expired OTP.");
-        return false;
+        return res.status(401).json({
+          error: "Invalid or expired OTP",
+        });
       }
     }
 
     // Step 3: Validate OTP
-    const isValidOTP = validateOTP(userEnteredOTP);
+    validateOTP(userEnteredOTP);
 
-    if (isValidOTP) {
-      return res.status(200).json({
-        msg: "Verification successful",
-        path: `/changepassword/${userId}`,
+    // if (isValidOTP) {
+    //   return res.status(200).json({
+    //     msg: "Verification successful",
+    //     path: `/changepassword/${userId}`,
 
-        // message: twilioRes,
-      });
-    } else {
-      return res.status(401).json({
-        error: "Invalid or expired OTP",
-      });
-    }
+    //     // message: twilioRes,
+    //   });
+    // } else {
+    //   return res.status(401).json({
+    //     error: "Invalid or expired OTP",
+    //   });
+    // }
   } catch (err) {
     next(err);
     console.log(err);
