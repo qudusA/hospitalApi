@@ -78,8 +78,10 @@ exports.postLogin = async (req, res, next) => {
     try {
       token = jwt.sign(
         { email, userId: userInstance.id },
-        "mySerectIsSuperSuperSecretive",
-        { expiresIn: "1h" }
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
       );
     } catch (err) {
       return next(err);
@@ -133,8 +135,9 @@ exports.postForgetPassword = async (req, res, next) => {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "olanrewajuqudus5@gmail.com",
-          pass: "fxtaxoqqnarrpdvl",
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+          // pass: "fxtaxoqqnarrpdvl",
         },
       });
 
