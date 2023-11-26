@@ -141,7 +141,7 @@ exports.postForgetPassword = async (req, res, next) => {
       });
 
       const mailOptions = {
-        from: "nobelnorel@gmail.com",
+        from: process.env.EMAIL_USERNAME,
         to: to,
         subject: "OTP FOR YOUR PASSWORD UPDATE",
         text: `Your OTP for the above task is: ${otp}`,
