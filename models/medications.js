@@ -28,13 +28,13 @@ const medicationSchema = new Schema({
     required: true,
   },
 
-  deleveryStatus: {
-    type: String,
-  },
+  // deleveryStatus: {
+  //   type: String,
+  // },
 
-  report: {
-    type: String,
-  },
+  // report: {
+  //   type: String,
+  // },
 });
 
 module.exports = medicationSchema;

@@ -26,6 +26,11 @@ const userSchema = new Schema(
       required: true,
     },
 
+    Dob: {
+      type: Date,
+      required: true,
+    },
+
     phone: {
       type: Number,
       required: true,
@@ -36,31 +41,38 @@ const userSchema = new Schema(
       required: false,
     },
 
-    flag: {
+    staff: {
       type: String,
-      required: [
-        true,
-        "kindly tell us who you are, i.e (doctor, patient, caregiver)",
-      ],
+      enum: ["yes", "no"],
+      required: true,
     },
 
-    bookedappointment: [bookedAppointment],
+    position: {
+      type: String,
+      required: function () {
+        return this.staff.toLowerCase() === "yes";
+      },
+    },
+    // employeeEmail: String,
+    employeeId: {
+      type: String,
+      required: function () {
+        return this.staff.toLowerCase() === "yes";
+      },
+    },
 
-    medicalhistory: { id: medicalHistory },
+    specialty: {
+      type: String,
+      required: function () {
+        return this.position.toLowerCase === "doctor";
+      },
+    },
 
     //  sent Messages.
     messages: [
       {
         type: Schema.Types.ObjectId,
         ref: "Message",
-      },
-    ],
-
-    //  for doctors
-    appointmentCreated: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Appointment",
       },
     ],
 

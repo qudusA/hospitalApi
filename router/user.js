@@ -1,8 +1,5 @@
 const { body } = require("express-validator");
-
-const isValid = require("../middleware/passwordAuth");
-
-// const bodyParser = require("body-parser");
+const staffIdModel = require("../models/staffId");
 
 const express = require("express");
 
@@ -311,28 +308,25 @@ router.post(
       // Call and return the result of validateCountry
       return validateCountry(value);
     }),
-    body("flag").custom((value) => {
-      function validate(val) {
-        const arr = ["patient", "practitioner", "verifier/caregiver"];
-        return arr.some((item) => item.toLowerCase() === val.toLowerCase());
-      }
-
-      function validateInput(val) {
-        if (!val) {
-          throw new Error("Identification field is required.");
+    body("Dob").isDate().withMessage("kindly input a valid date"),
+    body("staff").isIn(["yes", "no"]),
+    body("employeeId")
+      .custom(async (value, { req }) => {
+        const user = await staffIdModel.findOne({ staffId: value });
+        if (!user) {
+          return Promise.reject("input a valid staff id");
         }
-
-        if (!validate(val)) {
-          throw new Error("Identification field is required.");
+        if (user && user.hasBol === true) {
+          return Promise.reject(
+            "user with the staffid already exist kindly re enter the id or contact the hr"
+          );
         }
-
-        // If the input is valid
+        req.position = user?.position;
+        user.hasBol = true;
+        user.save();
         return true;
-      }
-
-      // Return the result of validateInput
-      return validateInput(value);
-    }),
+      })
+      .optional(),
   ],
   userController.postSignup
 );
@@ -343,7 +337,7 @@ router.post("/forgetPassword", userController.postForgetPassword);
 
 router.post("/validateotp/:userId", userController.postValidate);
 
-router.post(
+router.patch(
   "/changepassword/:userId",
   [
     body("newPassword")
@@ -395,7 +389,7 @@ router.post(
         return true;
       }),
   ],
-  userController.postChangePassword
+  userController.patchChangePassword
 );
 
 module.exports = router;

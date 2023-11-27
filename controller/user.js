@@ -3,16 +3,29 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 const twilio = require("twilio");
+const staffIdModel = require("../models/staffId");
 
 const UserModel = require("../models/user");
 
+// exports.postRegisterAS = async (req, res, next)=>{
+//   const {position} = req.body;
+// if(position === "doctor")
+// }
+
 exports.postSignup = async (req, res, next) => {
   try {
-    const { email, password, fullName, newGender, newPhone, country, flag } =
-      req.body;
+    const {
+      email,
+      password,
+      fullName,
+      newGender,
+      newPhone,
+      country,
+      staff,
+      Dob,
+    } = req.body;
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      console.log(error.array());
       return res.status(422).json({ errors: error.array() });
     }
     const userInstance = await UserModel.findOne({ email });
@@ -27,15 +40,34 @@ exports.postSignup = async (req, res, next) => {
       return next(err); // Properly handle the error by passing it to the next middleware
     }
 
-    const user = new UserModel({
-      email,
-      password: hash,
-      fullName,
-      gender: newGender,
-      phone: newPhone,
-      country,
-      flag,
-    });
+    let user;
+    if (staff === "yes") {
+      const { employeeId } = req.body;
+      const position = req.position;
+      // console.log(position, employeeId);
+      user = new UserModel({
+        email,
+        password: hash,
+        fullName,
+        gender: newGender,
+        phone: newPhone,
+        country,
+        staff,
+        position,
+        employeeId,
+        Dob,
+      });
+    } else {
+      user = new UserModel({
+        email,
+        password: hash,
+        fullName,
+        gender: newGender,
+        phone: newPhone,
+        country,
+        staff,
+      });
+    }
 
     const savedUser = await user.save();
 
@@ -90,6 +122,7 @@ exports.postLogin = async (req, res, next) => {
     res.status(200).json({
       message: "Login successful",
       email,
+      userId: userInstance.id,
       token,
     });
   } catch (err) {
@@ -212,26 +245,13 @@ exports.postValidate = async (req, res, next) => {
 
     // Step 3: Validate OTP
     validateOTP(userEnteredOTP);
-
-    // if (isValidOTP) {
-    //   return res.status(200).json({
-    //     msg: "Verification successful",
-    //     path: `/changepassword/${userId}`,
-
-    //     // message: twilioRes,
-    //   });
-    // } else {
-    //   return res.status(401).json({
-    //     error: "Invalid or expired OTP",
-    //   });
-    // }
   } catch (err) {
     next(err);
     console.log(err);
   }
 };
 
-exports.postChangePassword = async (req, res, next) => {
+exports.patchChangePassword = async (req, res, next) => {
   const { userId } = req.params;
   const { newPassword } = req.body;
   const error = validationResult(req);

@@ -4,6 +4,9 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const mongoConnect = require("./utils/mongoose");
+const { v4: uuidv4 } = require("uuid");
+const staffIdCreationRouter = require("./router/staffIdCreation");
+const bookedAppointmentRouter = require("./router/bookedappointment");
 
 const path = require("path");
 const fs = require("fs");
@@ -20,6 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// console.log(uuidv4());
 const accesLog = fs.createWriteStream(path.join(__dirname, "access.log"), {
   flag: "a",
 });
@@ -32,6 +36,10 @@ app.use(compression());
 
 app.use(userRouter);
 app.use("/medicationhistoy", medicationHistoryRouter);
+app.use(bookedAppointmentRouter);
+
+// created by Hr
+app.use(staffIdCreationRouter);
 
 app.get("/", (req, res, next) => {
   res.status(200).json({

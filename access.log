@@ -1,6 +1,0 @@
-::1 - - [26/Nov/2023:06:54:04 +0000] "POST /forgetPassword HTTP/1.1" 200 96 "-" "PostmanRuntime/7.35.0"
-::1 - - [26/Nov/2023:06:54:23 +0000] "POST /validateotp/65625214c807d2cf30e40c68 HTTP/1.1" 401 34 "-" "PostmanRuntime/7.35.0"
-::1 - - [26/Nov/2023:06:54:37 +0000] "POST /validateotp/65625214c807d2cf30e40c68 HTTP/1.1" 200 83 "-" "PostmanRuntime/7.35.0"
-::1 - - [26/Nov/2023:06:55:07 +0000] "POST /changepassword/65625214c807d2cf30e40c68 HTTP/1.1" 401 119 "-" "PostmanRuntime/7.35.0"
-::1 - - [26/Nov/2023:06:55:32 +0000] "POST /changepassword/65625214c807d2cf30e40c68 HTTP/1.1" 201 47 "-" "PostmanRuntime/7.35.0"
-::1 - - [26/Nov/2023:06:56:12 +0000] "POST /changepassword/65625214c807d2cf30e40c68 HTTP/1.1" 401 24 "-" "PostmanRuntime/7.35.0"

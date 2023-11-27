@@ -11,11 +11,6 @@ const medicalHistorySchema = new Schema(
       required: true,
     },
 
-    Dob: {
-      type: Date,
-      required: true,
-    },
-
     bloodGroup: {
       type: String,
       required: true,
@@ -40,9 +35,9 @@ const medicalHistorySchema = new Schema(
       type: Date,
     },
 
-    patient: {
+    patientId: {
       type: Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "Ptients",
     },
 
     caregiver: {
@@ -51,6 +46,19 @@ const medicalHistorySchema = new Schema(
     },
 
     medications: [medication],
+
+    // patient: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
+    conditions: [{ type: String }],
+
+    allergies: [{ type: String }],
+
+    surgeries: [
+      {
+        name: { type: String, required: true },
+        date: { type: Date },
+        notes: { type: String },
+      },
+    ],
   },
   { timestamps: true }
 );
