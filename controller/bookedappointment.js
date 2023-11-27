@@ -45,4 +45,6 @@ exports.postBookedAppointment = async (req, res, next) => {
   }
 };
 
-exports.postPyment = async (req, res, next) => {};
+exports.postPyment = async (req, res, next) => {
+  next();
+};
