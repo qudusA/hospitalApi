@@ -44,6 +44,8 @@ app.use(staffIdCreationRouter);
 app.get("/", (req, res, next) => {
   res.status(200).json({
     message: "seccesful",
+    apiAuthur: "olanrewaju qudus",
+    function: "hospital operation api",
   });
 });
 
